@@ -1,0 +1,11 @@
+cocos2d
+CMakeLists.txt
+proj.linux
+*.a
+*.so
+*.class
+*.iml
+*/build/
+*.settings/
+*.project
+*.idea

@@ -9,8 +9,9 @@
 #define ParallaxNodeExtras_h
 
 #include "cocos2d.h"
+#include "CustomParallaxNode.h"
 
-class ParallaxNodeExtras : public cocos2d::ParallaxNode {
+class ParallaxNodeExtras : public CustomParallaxNode {
 public:
     
     // Need to provide a constructor

@@ -32,10 +32,10 @@ using namespace CocosDenshion;
 Scene* HelloWorld::scene()
 {
     // 'scene' is an autorelease object
-    Scene *scene = Scene::create();
+    auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    HelloWorld *layer = HelloWorld::create();
+    auto layer = HelloWorld::create();
     
     // add layer as a child to scene
     scene->addChild(layer);
@@ -58,7 +58,7 @@ bool HelloWorld::init()
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
     
     _ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-    Size winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getWinSize();
     _ship->setPosition(Vec2(winSize.width * 0.1, winSize.height * 0.5));
     _batchNode->addChild(_ship, 1);
     
@@ -75,8 +75,8 @@ bool HelloWorld::init()
     _spacialanomaly2 = Sprite::create("bg_spacialanomaly2.png");
     
     // 3) Determine relative movement speeds for space dust and background
-    Point dustSpeed = Vec2(0.1, 0.1);
-    Point bgSpeed = Vec2(0.05, 0.05);
+    auto dustSpeed = Vec2(0.1, 0.1);
+    auto bgSpeed = Vec2(0.05, 0.05);
     
     // 4) Add children to ParallaxNode
     _backgroundNode->addChild(_spacedust1, 0, dustSpeed , Vec2(0,winSize.height/2)); // 2
@@ -116,8 +116,8 @@ bool HelloWorld::init()
     this->setTouchEnabled(true);
     
     _lives = 3;
-    double curTime = getTimeTick();
-    _gameOverTime = curTime + 30000;
+    auto curTime = getTimeTick();
+    _gameOverTime = curTime + 60000;
     
     SimpleAudioEngine::getInstance()->playBackgroundMusic("SpaceGame.wav",true);
     SimpleAudioEngine::getInstance()->preloadEffect("explosion_large.wav");
@@ -136,14 +136,14 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 void HelloWorld::update(float dt) {
-    Point backgroundScrollVert = Vec2(-1000,0);
+    auto backgroundScrollVert = Vec2(-1000,0);
     _backgroundNode->setPosition(_backgroundNode->getPosition() + backgroundScrollVert * dt);
     
-    std::vector<Node*> spaceDusts(2);
+    auto spaceDusts = std::vector<Node*>(2);
     spaceDusts[0] = _spacedust1;
     spaceDusts[1] = _spacedust2;
     for (int ii = 0; ii <spaceDusts.size(); ii++) {
-        Sprite * spaceDust = (Sprite *)(spaceDusts[ii]);
+        auto spaceDust = (Sprite *)(spaceDusts[ii]);
         float xPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).x ;
         float size = spaceDust->getContentSize().width;
         if ( xPosition < -size/2 ) {
@@ -151,13 +151,13 @@ void HelloWorld::update(float dt) {
         }
     }
     
-    std::vector<Node*> backGrounds(4);
+    auto backGrounds = std::vector<Node*>(4);
     backGrounds[0] = _galaxy;
     backGrounds[1] = _planetsunrise;
     backGrounds[2] = _spacialanomaly;
     backGrounds[3] = _spacialanomaly2;
     for (int ii = 0; ii < backGrounds.size(); ii++) {
-        Sprite * background = (Sprite *)(backGrounds[ii]);
+        auto background = (Sprite *)(backGrounds[ii]);
         float xPosition = _backgroundNode->convertToWorldSpace(background->getPosition()).x;
         float size = background->getContentSize().width;
         if (xPosition < -size) {
@@ -165,25 +165,25 @@ void HelloWorld::update(float dt) {
         }
     }
     
-    Size winSize = Director::getInstance()->getWinSize();
-    float maxY = winSize.height - _ship->getContentSize().height/2;
-    float minY = _ship->getContentSize().height/2;
+    auto winSize = Director::getInstance()->getWinSize();
+    auto maxY = winSize.height - _ship->getContentSize().height/2;
+    auto minY = _ship->getContentSize().height/2;
     
-    float diff = (_shipPointsPerSecY * dt);
-    float newY = _ship->getPosition().y + diff;
+    auto diff = (_shipPointsPerSecY * dt);
+    auto newY = _ship->getPosition().y + diff;
     newY = MIN(MAX(newY, minY), maxY);
     _ship->setPosition(Vec2(_ship->getPosition().x, newY));
     
-    float curTimeMillis = getTimeTick();
-    if (curTimeMillis > _nextAsteroidSpawn) {
+    auto curTimeMillis = getTimeTick();
+    if(curTimeMillis > _nextAsteroidSpawn) {
         
-        float randMillisecs = randomValueBetween(0.20,1.0) * 1000;
+        auto randMillisecs = randomValueBetween(0.20,1.0) * 1000;
         _nextAsteroidSpawn = randMillisecs + curTimeMillis;
         
-        float randY = randomValueBetween(0.0,winSize.height);
-        float randDuration = randomValueBetween(2.0,10.0);
+        auto randY = randomValueBetween(0.0,winSize.height);
+        auto randDuration = randomValueBetween(2.0,10.0);
         
-        Sprite *asteroid = (Sprite *)_asteroids->getObjectAtIndex(_nextAsteroid);
+        auto asteroid = (Sprite *)_asteroids->getObjectAtIndex(_nextAsteroid);
         _nextAsteroid++;
         
         if (_nextAsteroid >= _asteroids->count())
@@ -196,8 +196,8 @@ void HelloWorld::update(float dt) {
     }
     
     // Asteroids
-    Ref* asteroid;
-    Ref* shipLaser;
+    auto asteroid = (Ref*)NULL;
+    auto shipLaser = (Ref*)NULL;
     CCARRAY_FOREACH(_asteroids, asteroid){
         if (!((Sprite *) asteroid)->isVisible() )
             continue;
@@ -239,10 +239,10 @@ void HelloWorld::onAcceleration(Acceleration* pAccelerationValue) {
     // in landscape mode right x=-y and y=x !!! (Strange and confusing choice)
     pAccelerationValue->x = pAccelerationValue->y;
     rollingX = (pAccelerationValue->x * KFILTERINGFACTOR) + (rollingX * (1.0 - KFILTERINGFACTOR));
-    float accelX = pAccelerationValue->x - rollingX;
-    Size winSize = Director::getInstance()->getWinSize();
-    float accelDiff = accelX - KRESTACCELX;
-    float accelFraction = accelDiff / KMAXDIFFX;
+    auto accelX = pAccelerationValue->x - rollingX;
+    auto winSize = Director::getInstance()->getWinSize();
+    auto accelDiff = accelX - KRESTACCELX;
+    auto accelFraction = accelDiff / KMAXDIFFX;
     _shipPointsPerSecY = KSHIPMAXPOINTSPERSEC * accelFraction;
 }
 
@@ -250,10 +250,10 @@ float HelloWorld::randomValueBetween(float low, float high) {
     return (((float) arc4random() / 0xFFFFFFFFu) * (high - low)) + low;
 }
 
-float HelloWorld::getTimeTick() {
+double HelloWorld::getTimeTick() {
     timeval time;
     gettimeofday(&time, NULL);
-    unsigned long millisecs = (time.tv_sec * 1000) + (time.tv_usec/1000);
+    auto millisecs = (time.tv_sec * 1000) + (time.tv_usec/1000);
     return (float) millisecs;
 }
 
@@ -270,9 +270,9 @@ void HelloWorld::setTouchEnabled(bool enabled) {
 void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event) {
     SimpleAudioEngine::getInstance()->playEffect("laser_ship.wav");
     
-    Size winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getWinSize();
     
-    Sprite *shipLaser = (Sprite *)_shipLasers->getObjectAtIndex(_nextShipLaser++);
+    auto shipLaser = (Sprite *)_shipLasers->getObjectAtIndex(_nextShipLaser++);
     if ( _nextShipLaser >= _shipLasers->count() )
         _nextShipLaser = 0;
     shipLaser->setPosition(_ship->getPosition() + Vec2(shipLaser->getContentSize().width/2, 0));
@@ -296,23 +296,23 @@ void HelloWorld::endScene( EndReason endReason ) {
         return;
     _gameOver = true;
     
-    Size winSize = Director::getInstance()->getWinSize();
+    auto winSize = Director::getInstance()->getWinSize();
     char message[10] = "You Win";
     if ( endReason == KENDREASONLOSE)
         strcpy(message,"You Lose");
 
-    Label* label = Label::createWithBMFont("Arial.fnt", message);
+    auto label = Label::createWithBMFont("Arial.fnt", message);
     label->setScale(0.1);
     label->setPosition(Vec2(winSize.width/2 , winSize.height*0.6));
     this->addChild(label);
     
     strcpy(message,"Restart");
-    Label* restartLabel = Label::createWithBMFont("Arial.fnt", message);
-    MenuItemLabel* restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_0(HelloWorld::restartTapped, this));
+    auto restartLabel = Label::createWithBMFont("Arial.fnt", message);
+    auto restartItem = MenuItemLabel::create(restartLabel, CC_CALLBACK_0(HelloWorld::restartTapped, this));
     restartItem->setScale(0.1);
     restartItem->setPosition( Vec2(winSize.width/2, winSize.height*0.4));
     
-    Menu *menu = Menu::create(restartItem, NULL);
+    auto menu = Menu::create(restartItem, NULL);
     menu->setPosition(Point::ZERO);
     this->addChild(menu);
     

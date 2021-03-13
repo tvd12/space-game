@@ -19,14 +19,14 @@ ParallaxNodeExtras::~ParallaxNodeExtras() {
 }
 
 ParallaxNodeExtras * ParallaxNodeExtras::node() {
-    ParallaxNodeExtras* pRet = new ParallaxNodeExtras();
+    auto pRet = new ParallaxNodeExtras();
     return pRet;
 }
 
 void ParallaxNodeExtras::incrementOffset(Point offset, Node* node){
     for(unsigned int i = 0; i < _parallaxArray->num; i++) {
-        IPointObject* point = (IPointObject*)_parallaxArray->arr[i];
-        Node* curNode = point->getChild();
+        auto point = (IPointObject*)_parallaxArray->arr[i];
+        auto curNode = point->getChild();
         if(curNode == node) {
             point->setOffset(point->getOffset() + offset);
             break;

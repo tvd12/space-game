@@ -174,14 +174,13 @@ void HelloWorld::update(float dt) {
     newY = MIN(MAX(newY, minY), maxY);
     _ship->setPosition(Vec2(_ship->getPosition().x, newY));
     
-    auto curTimeMillis = getTimeTick();
+    double curTimeMillis = getTimeTick();
     if(curTimeMillis > _nextAsteroidSpawn) {
-        
-        auto randMillisecs = randomValueBetween(0.20,1.0) * 1000;
+        auto randMillisecs = randomValueBetween(0.20, 1.0) * 1000;
         _nextAsteroidSpawn = randMillisecs + curTimeMillis;
         
-        auto randY = randomValueBetween(0.0,winSize.height);
-        auto randDuration = randomValueBetween(2.0,10.0);
+        auto randY = randomValueBetween(0.0, winSize.height);
+        auto randDuration = randomValueBetween(2.0, 10.0);
         
         auto asteroid = (Sprite *)_asteroids->getObjectAtIndex(_nextAsteroid);
         _nextAsteroid++;
@@ -254,7 +253,7 @@ double HelloWorld::getTimeTick() {
     timeval time;
     gettimeofday(&time, NULL);
     auto millisecs = (time.tv_sec * 1000) + (time.tv_usec/1000);
-    return (float) millisecs;
+    return millisecs;
 }
 
 void HelloWorld::setInvisible(Node * node) {

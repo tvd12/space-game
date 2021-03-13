@@ -53,7 +53,7 @@ private:
     
     cocos2d::__Array* _asteroids;
     int _nextAsteroid;
-    float _nextAsteroidSpawn;
+    double _nextAsteroidSpawn;
     
     cocos2d::__Array* _shipLasers;
     int _nextShipLaser;

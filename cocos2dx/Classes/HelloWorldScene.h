@@ -47,6 +47,8 @@ private:
     cocos2d::Sprite *_spacialanomaly;
     cocos2d::Sprite *_spacialanomaly2;
     
+    cocos2d::EventListenerTouchAllAtOnce *_touchListener;
+    
     float _shipPointsPerSecY;
     
     cocos2d::__Array* _asteroids;
@@ -86,7 +88,8 @@ public:
     void setInvisible(cocos2d::Node * node);
     float getTimeTick();
     
-    virtual void onTouchesBegan(cocos2d::__Set* touches, cocos2d::Event* event);
+    virtual void setTouchEnabled(bool enable);
+    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

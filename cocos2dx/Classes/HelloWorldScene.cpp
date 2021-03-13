@@ -113,7 +113,7 @@ bool HelloWorld::init()
         _batchNode->addChild(shipLaser);
         _shipLasers->addObject(shipLaser);
     }
-    this->_touchEnabled = true;
+    this->setTouchEnabled(true);
     
     _lives = 3;
     double curTime = getTimeTick();
@@ -261,7 +261,13 @@ void HelloWorld::setInvisible(Node * node) {
     node->setVisible(false);
 }
 
-void HelloWorld::onTouchesBegan(cocos2d::__Set* touches, cocos2d::Event* event)
+void HelloWorld::setTouchEnabled(bool enabled) {
+    _touchListener = EventListenerTouchAllAtOnce::create();
+    _touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
+}
+
+void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 {
     SimpleAudioEngine::getInstance()->playEffect("laser_ship.wav");
     

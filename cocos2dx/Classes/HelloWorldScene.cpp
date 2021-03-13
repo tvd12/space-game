@@ -267,8 +267,7 @@ void HelloWorld::setTouchEnabled(bool enabled) {
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
 }
 
-void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
-{
+void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event) {
     SimpleAudioEngine::getInstance()->playEffect("laser_ship.wav");
     
     Size winSize = Director::getInstance()->getWinSize();
@@ -280,6 +279,9 @@ void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event
     shipLaser->setVisible(true);
     shipLaser->stopAllActions();
     shipLaser->runAction(Sequence::create(MoveBy::create(0.5,Vec2(winSize.width, 0)), CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)), NULL)); // DO NOT FORGET TO TERMINATE WITH NULL
+    auto touchPosition = touches[0]->getLocation();
+    auto newPosition = Vec2(_ship->getPosition().x, touchPosition.y);
+    _ship->runAction(MoveTo::create(0.25, newPosition));
 }
 
 void HelloWorld::restartTapped() {

@@ -25,6 +25,8 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "ParallaxNodeExtras.h"
+#include "SocketClientProxy.h"
+#include "GameManager.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -58,9 +60,12 @@ bool HelloWorld::init()
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
     
     _ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
+    _ship->setTag(0);
+    _ship->setName("ship");
     auto winSize = Director::getInstance()->getWinSize();
     _ship->setPosition(Vec2(winSize.width * 0.1, winSize.height * 0.5));
     _batchNode->addChild(_ship, 1);
+    GameManager::getInstance()->addGameObject(_ship);
     
     // 1) Create the ParallaxNode
     _backgroundNode = ParallaxNodeExtras::node();
@@ -100,8 +105,10 @@ bool HelloWorld::init()
     for(int i = 0; i < KNUMASTEROIDS; ++i) {
         Sprite *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");
         asteroid->setVisible(false);
+        asteroid->setName("asteroid");
         _batchNode->addChild(asteroid);
         _asteroids->addObject(asteroid);
+        GameManager::getInstance()->addGameObject(asteroid);
     }
     
 #define KNUMLASERS 5
@@ -113,7 +120,6 @@ bool HelloWorld::init()
         _batchNode->addChild(shipLaser);
         _shipLasers->addObject(shipLaser);
     }
-    this->setTouchEnabled(true);
     
     _lives = 3;
     auto curTime = getTimeTick();
@@ -122,6 +128,19 @@ bool HelloWorld::init()
     SimpleAudioEngine::getInstance()->playBackgroundMusic("SpaceGame.wav",true);
     SimpleAudioEngine::getInstance()->preloadEffect("explosion_large.wav");
     SimpleAudioEngine::getInstance()->preloadEffect("laser_ship.wav");
+    
+    _touchEnabled = false;
+    _touchListener = EventListenerTouchAllAtOnce::create();
+    _touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
+    
+    auto socketClientProxy = SocketClientProxy::getInstance();
+    socketClientProxy->onAppAccessed([&] {
+        _touchEnabled = true;
+    });
+    
+    socketClientProxy->setCredential();
+    socketClientProxy->connectToServer();
     
     return true;
 }
@@ -136,6 +155,12 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 void HelloWorld::update(float dt) {
+    auto socketClientProxy = SocketClientProxy::getInstance();
+    
+    if(!socketClientProxy->isConnected()) {
+        return;
+    }
+    
     auto backgroundScrollVert = Vec2(-1000,0);
     _backgroundNode->setPosition(_backgroundNode->getPosition() + backgroundScrollVert * dt);
     
@@ -189,6 +214,7 @@ void HelloWorld::update(float dt) {
             _nextAsteroid = 0;
         
         asteroid->stopAllActions();
+        asteroid->setTag(_nextAsteroid - 1);
         asteroid->setPosition( Vec2(winSize.width+asteroid->getContentSize().width/2, randY));
         asteroid->setVisible(true);
         asteroid->runAction(Sequence::create(MoveBy::create(randDuration, Vec2(-winSize.width-asteroid->getContentSize().width, 0)), CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)), NULL)); // DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
@@ -224,6 +250,7 @@ void HelloWorld::update(float dt) {
     } else if (curTimeMillis >= _gameOverTime) {
         this->endScene(KENDREASONWIN);
     }
+    GameManager::getInstance()->syncGameObjectPositions();
 }
 
 void HelloWorld::onAcceleration(Acceleration* pAccelerationValue) {
@@ -231,8 +258,7 @@ void HelloWorld::onAcceleration(Acceleration* pAccelerationValue) {
 #define KRESTACCELX -0.6
 #define KSHIPMAXPOINTSPERSEC (winSize.height*0.5)
 #define KMAXDIFFX 0.2
-    
-    double rollingX;
+    double rollingX = 0.0;
     
     // Cocos2DX inverts X and Y accelerometer depending on device orientation
     // in landscape mode right x=-y and y=x !!! (Strange and confusing choice)
@@ -260,13 +286,10 @@ void HelloWorld::setInvisible(Node * node) {
     node->setVisible(false);
 }
 
-void HelloWorld::setTouchEnabled(bool enabled) {
-    _touchListener = EventListenerTouchAllAtOnce::create();
-    _touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
-}
-
 void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event) {
+    if(!_touchEnabled) {
+        return;
+    }
     SimpleAudioEngine::getInstance()->playEffect("laser_ship.wav");
     
     auto winSize = Director::getInstance()->getWinSize();

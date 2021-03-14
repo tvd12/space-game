@@ -1,3 +1,4 @@
+*/.cxx/
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -6,3 +7,7 @@
 /build
 /captures
 /.externalNativeBuild
+gradle/
+gradlew
+gradlew.bat
+gradle/*

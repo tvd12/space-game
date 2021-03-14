@@ -88,7 +88,6 @@ public:
     void setInvisible(cocos2d::Node * node);
     double getTimeTick();
     
-    virtual void setTouchEnabled(bool enable);
     virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 };
 

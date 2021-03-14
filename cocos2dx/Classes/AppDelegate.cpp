@@ -24,6 +24,7 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "SocketClientProxy.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -122,8 +123,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     director->runWithScene(scene);
+    
+    director->getScheduler()->scheduleUpdate(this, 0, false);
 
     return true;
+}
+
+void AppDelegate::update(float dt) {
+    SocketClientProxy::getInstance()->processEvents();
 }
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.

@@ -1,0 +1,25 @@
+//
+//  GameManager.h
+//  space-game-mobile
+//
+//  Created by Dzung on 14/03/2021.
+//
+
+#ifndef GameManager_h
+#define GameManager_h
+
+#include "cocos2d.h"
+#include "EzyHeaders.h"
+
+class GameManager {
+private:
+    std::map<cocos2d::Node*, cocos2d::Vec2> mGameObjects;
+private:
+    EZY_SINGLETON_GET_INSTANCE(GameManager);
+public:
+    void addGameObject(cocos2d::Node* gameObject);
+    void syncGameObjectPositions();
+    void clear();
+};
+
+#endif /* GameManager_h */

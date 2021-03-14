@@ -20,6 +20,7 @@ ParallaxNodeExtras::~ParallaxNodeExtras() {
 
 ParallaxNodeExtras * ParallaxNodeExtras::node() {
     auto pRet = new ParallaxNodeExtras();
+    pRet->autorelease();
     return pRet;
 }
 

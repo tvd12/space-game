@@ -121,7 +121,13 @@ bool HelloWorld::init()
         _shipLasers->addObject(shipLaser);
     }
     
+    _scoreLabel = Label::createWithBMFont("Arial.fnt", "Score: 0");
+    _scoreLabel->setAnchorPoint(Vec2(1.0, 1.0));
+    _scoreLabel->setPosition(Vec2(winSize.width - 45, winSize.height - 60.0));
+    this->addChild(_scoreLabel);
+    
     _lives = 3;
+    _currentScore = 0;
     auto curTime = getTimeTick();
     _gameOverTime = curTime + 3 * 60000;
     
@@ -155,6 +161,8 @@ bool HelloWorld::init()
                 runAsteroid(gameObject);
             }
         }
+        _currentScore = data->getInt("playerScore");
+        _scoreLabel->setString(std::string("Score: ").append(std::to_string(_currentScore)));
         if(gameId) {
             if(gameState == "PLAYING") {
                 _touchEnabled = true;
@@ -177,6 +185,10 @@ bool HelloWorld::init()
     socketClientProxy->onStartGame([&](entity::EzyObject* data) {
         _touchEnabled = true;
         this->scheduleUpdate();
+    });
+    socketClientProxy->onDisconnected([&] {
+        _touchEnabled = false;
+        this->unscheduleUpdate();
     });
     
     socketClientProxy->setCredential();
@@ -271,6 +283,9 @@ void HelloWorld::update(float dt) {
                 SimpleAudioEngine::getInstance()->playEffect("explosion_large.wav");
                 ((Sprite *)shipLaser)->setVisible(false);
                 ((Sprite *)asteroid)->setVisible(false);
+                _currentScore += 10;
+                _scoreLabel->setString(std::string("Score: ").append(std::to_string(_currentScore)));
+                GameManager::getInstance()->syncScore(_currentScore);
                 continue;
             }
         }
@@ -347,8 +362,9 @@ void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event* event
 void HelloWorld::restartTapped() {
     Director::getInstance()->replaceScene
     (TransitionZoomFlipX::create(0.5, this->scene()));
-    // reschedule
-    this->scheduleUpdate();
+    
+    // start new game
+    SocketClientProxy::getInstance()->getGameId();
 }
 
 void HelloWorld::endScene( EndReason endReason ) {

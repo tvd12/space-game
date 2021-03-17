@@ -12,6 +12,7 @@
 
 using namespace EZY_NAMESPACE;
 
+typedef std::function<void(void)> callback0;
 typedef std::function<void(entity::EzyObject*)> objectCallback;
 
 class SocketClientProxy {
@@ -26,6 +27,7 @@ protected:
     EZY_SYNTHESIZE_READONLY(objectCallback, ReconnectedCallback);
     EZY_SYNTHESIZE_READONLY(objectCallback, GameIdReceivedCallback);
     EZY_SYNTHESIZE_READONLY(objectCallback, StartGameCallback);
+    EZY_SYNTHESIZE_READONLY(callback0, DisconnectedCallback);
 public:
     void setCredential(const std::string username = "dungtv",
                        const std::string password = "123456");
@@ -41,9 +43,13 @@ public:
     
     void emitStartGame(entity::EzyObject* data);
     void onStartGame(const objectCallback& callback);
+    
+    void emitDisconnected();
+    void onDisconnected(const callback0& callback);
 public:
     void getGameId();
     void startGame(long gameId);
+    void syncScore(long gameId, long score);
     void syncPosition(long gameId,
                       std::string objectName,
                       int objectIndex,

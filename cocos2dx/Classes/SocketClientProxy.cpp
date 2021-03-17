@@ -13,8 +13,11 @@ const auto APP_NAME = "space-game";
 
 class DisconnectionHandler : public handler::EzyDisconnectionHandler {
 protected:
-    bool shouldReconnect(event::EzyDisconnectionEvent* event) {
+    bool shouldReconnect(event::EzyDisconnectionEvent* event) override {
         return true;
+    }
+    void postHandle(event::EzyDisconnectionEvent* event) override {
+        SocketClientProxy::getInstance()->emitDisconnected();
     }
 };
  
@@ -62,6 +65,13 @@ protected:
     }
 };
 
+class GetGameIdResponseHandler : public handler::EzyAbstractAppDataHandler<entity::EzyObject> {
+protected:
+    void process(entity::EzyApp* app, entity::EzyObject* data) override {
+        SocketClientProxy::getInstance()->emitGameIdReceived(data);
+    }
+};
+
 class StartGameResponseHandler : public handler::EzyAbstractAppDataHandler<entity::EzyObject> {
 protected:
     void process(entity::EzyApp* app, entity::EzyObject* data) override {
@@ -85,6 +95,7 @@ SocketClientProxy::SocketClientProxy() {
     setup->addDataHandler(constant::UdpHandshake, new UdpHandshakeHandler());
     auto appSetup = setup->setupApp(APP_NAME);
     appSetup->addDataHandler("reconnect", new ReconnectResponseHandler());
+    appSetup->addDataHandler("getGameId", new GetGameIdResponseHandler());
     appSetup->addDataHandler("startGame", new StartGameResponseHandler());
     mAppAccessed = false;
 }
@@ -96,7 +107,9 @@ void SocketClientProxy::setCredential(const std::string username,
 }
 
 void SocketClientProxy::connectToServer() {
-    mSocketClient->connect("127.0.0.1", 3005);
+    if(!isConnected()) {
+        mSocketClient->connect("127.0.0.1", 3005);
+    }
 }
 
 void SocketClientProxy::processEvents() {
@@ -104,7 +117,7 @@ void SocketClientProxy::processEvents() {
 }
 
 bool SocketClientProxy::isConnected() {
-    return mSocketClient->isConnected() && mSocketClient->isUdpConnected();
+    return mSocketClient->isConnected() && mSocketClient->isUdpConnected() && mAppAccessed;
 }
 
 void SocketClientProxy::emitReconnected(entity::EzyObject *data) {
@@ -132,6 +145,14 @@ void SocketClientProxy::onStartGame(const objectCallback &callback) {
     mStartGameCallback = callback;
 }
 
+void SocketClientProxy::emitDisconnected() {
+    mAppAccessed = false;
+    mDisconnectedCallback();
+}
+
+void SocketClientProxy::onDisconnected(const callback0 &callback) {
+    mDisconnectedCallback = callback;
+}
 
 void SocketClientProxy::getGameId() {
     auto request = new entity::EzyObject();
@@ -144,6 +165,14 @@ void SocketClientProxy::startGame(long gameId) {
     request->setString("gameName", GAME_NAME);
     request->setInt("gameId", gameId);
     mSocketClient->getApp()->send("startGame", request);
+}
+
+void SocketClientProxy::syncScore(long gameId, long score) {
+    auto request = new entity::EzyObject();
+    request->setString("gameName", GAME_NAME);
+    request->setInt("gameId", gameId);
+    request->setInt("score", score);
+    mSocketClient->getApp()->send("updateScore", request);
 }
 
 void SocketClientProxy::syncPosition(long gameId,
@@ -166,5 +195,8 @@ void SocketClientProxy::syncPosition(long gameId,
     request->setString("objectName", objectName);
     request->setBool("visible", visible);
     request->setObject("position", position);
-    mSocketClient->getApp()->udpSend("syncPosition", request);
+    auto app = mSocketClient->getApp();
+    if(app) {
+        app->udpSend("syncPosition", request);
+    }
 }

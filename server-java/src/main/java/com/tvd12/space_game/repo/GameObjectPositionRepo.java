@@ -15,4 +15,10 @@ public interface GameObjectPositionRepo
             String game,
             long gameId
     );
+
+    @EzyQuery("{$and:[{'_id.game':?0},{'_id.gameId':?1}]}")
+    int deleteByGameAndGameId(
+            String game,
+            long gameId
+    );
 }

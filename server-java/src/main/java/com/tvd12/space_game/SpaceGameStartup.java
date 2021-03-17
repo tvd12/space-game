@@ -43,10 +43,18 @@ public class SpaceGameStartup {
         EzyUdpSettingBuilder udpSettingBuilder = new EzyUdpSettingBuilder()
                 .active(true);
 
+        EzySessionManagementSettingBuilder sessionManagementSettingBuilder = new EzySessionManagementSettingBuilder()
+                .sessionMaxRequestPerSecond(
+                        new EzySessionManagementSettingBuilder.EzyMaxRequestPerSecondBuilder()
+                            .value(250)
+                            .build()
+                );
+
         EzySimpleSettings settings = new EzySettingsBuilder()
                 .zone(zoneSettingBuilder.build())
                 .websocket(webSocketSettingBuilder.build())
                 .udp(udpSettingBuilder.build())
+                .sessionManagement(sessionManagementSettingBuilder.build())
                 .build();
 
         EzyEmbeddedServer server = EzyEmbeddedServer.builder()

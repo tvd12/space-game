@@ -11,11 +11,9 @@ import com.tvd12.ezyfoxserver.support.factory.EzyResponseFactory;
 import com.tvd12.space_game.entity.*;
 import com.tvd12.space_game.repo.GameCurrentStateRepo;
 import com.tvd12.space_game.repo.GameObjectPositionRepo;
+import com.tvd12.space_game.repo.LeaderBoardRepo;
 import com.tvd12.space_game.repo.PlayerCurrentGameRepo;
-import com.tvd12.space_game.request.GetGameIdRequest;
-import com.tvd12.space_game.request.ReconnectRequest;
-import com.tvd12.space_game.request.StartGameRequest;
-import com.tvd12.space_game.request.SyncPositionRequest;
+import com.tvd12.space_game.request.*;
 import com.tvd12.space_game.response.ReconnectResponse;
 import lombok.Setter;
 
@@ -37,6 +35,9 @@ public class UserRequestController extends EzyLoggable {
 
     @EzyAutoBind
     private GameCurrentStateRepo gameCurrentStateRepo;
+
+    @EzyAutoBind
+    private LeaderBoardRepo leaderBoardRepo;
 
     @EzyAutoBind
     private EzyMaxIdRepository maxIdRepository;
@@ -61,6 +62,10 @@ public class UserRequestController extends EzyLoggable {
 
     @EzyRequestHandle("startGame")
     public void startGame(StartGameRequest request, EzyUser user) {
+        gameObjectPositionRepo.deleteByGameAndGameId(
+                request.getGameName(),
+                request.getGameId()
+        );
         GameId gameId = new GameId(request.getGameName(), request.getGameId());
         GameCurrentState gameCurrentState = gameCurrentStateRepo.findById(gameId);
         if(gameCurrentState == null) {
@@ -88,6 +93,9 @@ public class UserRequestController extends EzyLoggable {
             GameCurrentState state =
                     gameCurrentStateRepo.findById(new GameId(game, gameId));
             response.setGameState(state != null ? state.getState() : GameState.FINISHED);
+            LeaderBoard leaderBoard =
+                    leaderBoardRepo.findById(new LeaderBoard.Id(game, gameId, player));
+            response.setPlayerScore(leaderBoard != null ? leaderBoard.getScore() : 0L);
             List<GameObjectPosition> gameObjectPositions =
                     gameObjectPositionRepo.findByGameAndGameId(game, gameId);
             for(GameObjectPosition gameObjectPosition: gameObjectPositions) {
@@ -114,11 +122,25 @@ public class UserRequestController extends EzyLoggable {
                         request.getGameId(),
                         request.getObjectId()
                 ),
+                user.getName(),
                 request.getObjectName(),
                 request.isVisible(),
                 request.getPosition()
         );
         gameObjectPositionRepo.save(gameObjectPosition);
+    }
+
+    @EzyRequestHandle("updateScore")
+    public void updateScore(UpdateScoreRequest request, EzyUser user) {
+        LeaderBoard leaderBoard = new LeaderBoard(
+                new LeaderBoard.Id(
+                        request.getGameName(),
+                        request.getGameId(),
+                        user.getName()
+                ),
+                request.getScore()
+        );
+        leaderBoardRepo.save(leaderBoard);
     }
 
 }

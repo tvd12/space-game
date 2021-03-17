@@ -2,7 +2,6 @@ package com.tvd12.space_game.entity;
 
 import com.tvd12.ezydata.database.annotation.EzyCollection;
 import com.tvd12.ezydata.database.annotation.EzyCollectionId;
-import com.tvd12.space_game.model.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,13 +12,10 @@ import lombok.Setter;
 @EzyCollection
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameObjectPosition {
+public class LeaderBoard {
     @EzyCollectionId(composite = true)
-    private Id id;
-    private String player;
-    private String objectName;
-    private boolean visible;
-    private Position position;
+    private LeaderBoard.Id id;
+    private long score;
 
     @Getter
     @Setter
@@ -28,6 +24,6 @@ public class GameObjectPosition {
     public static class Id {
         private String game;
         private long gameId;
-        private int objectId;
+        private String player;
     }
 }

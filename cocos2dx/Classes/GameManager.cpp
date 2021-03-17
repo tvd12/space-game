@@ -43,6 +43,10 @@ void GameManager::syncGameObjectPositions() {
     }
 }
 
+void GameManager::syncScore(long score) {
+    SocketClientProxy::getInstance()->syncScore(mGameId, score);
+}
+
 void GameManager::clear() {
     mGameObjectById.clear();
     mGameObjectPositions.clear();

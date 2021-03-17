@@ -23,6 +23,7 @@ public:
     cocos2d::Node* getGameObject(int id);
     void addGameObject(cocos2d::Node* gameObject);
     void syncGameObjectPositions();
+    void syncScore(long score);
     void clear();
 };
 

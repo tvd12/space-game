@@ -16,6 +16,7 @@ import java.util.List;
 @EzyObjectBinding
 public class ReconnectResponse {
     private long gameId;
+    private long playerScore;
     private GameState gameState = GameState.FINISHED;
     private List<GameObject> gameObjects = new ArrayList<>();
 

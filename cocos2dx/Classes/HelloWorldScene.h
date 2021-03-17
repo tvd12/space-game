@@ -47,6 +47,8 @@ private:
     cocos2d::Sprite *_spacialanomaly;
     cocos2d::Sprite *_spacialanomaly2;
     
+    cocos2d::Label *_scoreLabel;
+    
     cocos2d::EventListenerTouchAllAtOnce *_touchListener;
     
     float _shipPointsPerSecY;
@@ -59,6 +61,7 @@ private:
     int _nextShipLaser;
     
     int _lives;
+    long _currentScore;
     
     double _gameOverTime;
     bool _gameOver;

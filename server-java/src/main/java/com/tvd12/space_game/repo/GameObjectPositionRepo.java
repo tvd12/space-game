@@ -1,10 +1,18 @@
 package com.tvd12.space_game.repo;
 
+import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import com.tvd12.space_game.entity.GameObjectPosition;
 
+import java.util.List;
+
 @EzyRepository
 public interface GameObjectPositionRepo
         extends EzyMongoRepository<GameObjectPosition.Id, GameObjectPosition> {
+    @EzyQuery("{$and:[{'_id.game':?0},{'_id.gameId':?1}]}")
+    List<GameObjectPosition> findByGameAndGameId(
+            String game,
+            long gameId
+    );
 }

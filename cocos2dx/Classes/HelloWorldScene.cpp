@@ -54,13 +54,14 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+    _managedObjectCount = 0;
+    GameManager::getInstance()->clear();
     _batchNode = SpriteBatchNode::create("Sprites.pvr.ccz");
     this->addChild(_batchNode);
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Sprites.plist");
     
     _ship = Sprite::createWithSpriteFrameName("SpaceFlier_sm_1.png");
-    _ship->setTag(0);
+    _ship->setTag(_managedObjectCount ++);
     _ship->setName("ship");
     auto winSize = Director::getInstance()->getWinSize();
     _ship->setPosition(Vec2(winSize.width * 0.1, winSize.height * 0.5));
@@ -91,8 +92,6 @@ bool HelloWorld::init()
     _backgroundNode->addChild(_spacialanomaly, -1, bgSpeed, Vec2(900, winSize.height * 0.3));
     _backgroundNode->addChild(_spacialanomaly2, -1, bgSpeed, Vec2(1500, winSize.height * 0.9));
     
-    this->scheduleUpdate();
-    
     HelloWorld::addChild(ParticleSystemQuad::create("Stars1.plist"));
     HelloWorld::addChild(ParticleSystemQuad::create("Stars2.plist"));
     HelloWorld::addChild(ParticleSystemQuad::create("Stars3.plist"));
@@ -104,6 +103,7 @@ bool HelloWorld::init()
     _asteroids->retain();
     for(int i = 0; i < KNUMASTEROIDS; ++i) {
         Sprite *asteroid = Sprite::createWithSpriteFrameName("asteroid.png");
+        asteroid->setTag(_managedObjectCount ++);
         asteroid->setVisible(false);
         asteroid->setName("asteroid");
         _batchNode->addChild(asteroid);
@@ -123,7 +123,7 @@ bool HelloWorld::init()
     
     _lives = 3;
     auto curTime = getTimeTick();
-    _gameOverTime = curTime + 60000;
+    _gameOverTime = curTime + 3 * 60000;
     
     SimpleAudioEngine::getInstance()->playBackgroundMusic("SpaceGame.wav",true);
     SimpleAudioEngine::getInstance()->preloadEffect("explosion_large.wav");
@@ -135,8 +135,48 @@ bool HelloWorld::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
     
     auto socketClientProxy = SocketClientProxy::getInstance();
-    socketClientProxy->onAppAccessed([&] {
+    socketClientProxy->onReconnected([&](entity::EzyObject* data) {
+        auto gameId = data->getInt("gameId");
+        auto gameState = data->getString("gameState");
+        GameManager::getInstance()->setGameId(gameId);
+        auto gameObjectDatas = data->getArray("gameObjects");
+        for(auto i = 0 ; i < gameObjectDatas->size() ; ++i) {
+            auto gameObjectData = gameObjectDatas->getObject(i);
+            auto gameObjectId = gameObjectData->getInt("id");
+            auto gameObject = GameManager::getInstance()->getGameObject((int)gameObjectId);
+            auto position = gameObjectData->getObject("position");
+            auto x = position->getDouble("x");
+            auto y = position->getDouble("y");
+            gameObject->setPosition(Vec2(x, y));
+            auto visible = gameObjectData->getBool("visible");
+            gameObject->setVisible(visible);
+            auto objectName = gameObjectData->getString("name");
+            if(objectName == "asteroid") {
+                runAsteroid(gameObject);
+            }
+        }
+        if(gameId) {
+            if(gameState == "PLAYING") {
+                _touchEnabled = true;
+                this->scheduleUpdate();
+            }
+            else {
+                SocketClientProxy::getInstance()->startGame(gameId);
+            }
+        }
+        else {
+            SocketClientProxy::getInstance()->getGameId();
+        }
+    });
+    socketClientProxy->onGameIdReceived([&](entity::EzyObject* data) {
         _touchEnabled = true;
+        auto gameId = data->getInt("gameId");
+        GameManager::getInstance()->setGameId(gameId);
+        SocketClientProxy::getInstance()->startGame(gameId);
+    });
+    socketClientProxy->onStartGame([&](entity::EzyObject* data) {
+        _touchEnabled = true;
+        this->scheduleUpdate();
     });
     
     socketClientProxy->setCredential();
@@ -205,7 +245,6 @@ void HelloWorld::update(float dt) {
         _nextAsteroidSpawn = randMillisecs + curTimeMillis;
         
         auto randY = randomValueBetween(0.0, winSize.height);
-        auto randDuration = randomValueBetween(2.0, 10.0);
         
         auto asteroid = (Sprite *)_asteroids->getObjectAtIndex(_nextAsteroid);
         _nextAsteroid++;
@@ -214,10 +253,9 @@ void HelloWorld::update(float dt) {
             _nextAsteroid = 0;
         
         asteroid->stopAllActions();
-        asteroid->setTag(_nextAsteroid - 1);
         asteroid->setPosition( Vec2(winSize.width+asteroid->getContentSize().width/2, randY));
         asteroid->setVisible(true);
-        asteroid->runAction(Sequence::create(MoveBy::create(randDuration, Vec2(-winSize.width-asteroid->getContentSize().width, 0)), CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)), NULL)); // DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
+        runAsteroid(asteroid);
     }
     
     // Asteroids
@@ -343,4 +381,10 @@ void HelloWorld::endScene( EndReason endReason ) {
     label ->runAction(ScaleTo::create(0.5, 1.0));
     // Terminate update callback
     this->unscheduleUpdate();
+}
+
+void HelloWorld::runAsteroid(Node* asteroid) {
+    auto randDuration = randomValueBetween(2.0, 10.0);
+    auto winSize = Director::getInstance()->getWinSize();
+    asteroid->runAction(Sequence::create(MoveBy::create(randDuration, Vec2(-winSize.width-asteroid->getContentSize().width, 0)), CallFuncN::create(CC_CALLBACK_1(HelloWorld::setInvisible, this)), NULL)); // DO NOT FORGET TO TERMINATE WITH NULL (unexpected in C++)
 }

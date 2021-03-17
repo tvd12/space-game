@@ -48,18 +48,24 @@ protected:
 
 class AppAccessHandler : public handler::EzyAppAccessHandler {
 protected:
-    void postHandle(entity::EzyApp* app, entity::EzyArray* data) {
-        SocketClientProxy::getInstance()->emitAppAccessed();
+    void postHandle(entity::EzyApp* app, entity::EzyArray* data) override {
+        auto request = new entity::EzyObject();
+        request->setString("gameName", GAME_NAME);
+        app->send("reconnect", request);
     }
 };
  
-class StartGameResponseHandler : public handler::EzyAbstractAppDataHandler<entity::EzyValue> {
+class ReconnectResponseHandler : public handler::EzyAbstractAppDataHandler<entity::EzyObject> {
 protected:
-    void process(entity::EzyApp* app, entity::EzyValue* data) {
-        logger::log("recived message: ");
-#ifdef EZY_DEBUG
-        data->printDebug();
-#endif
+    void process(entity::EzyApp* app, entity::EzyObject* data) override {
+        SocketClientProxy::getInstance()->emitReconnected(data);
+    }
+};
+
+class StartGameResponseHandler : public handler::EzyAbstractAppDataHandler<entity::EzyObject> {
+protected:
+    void process(entity::EzyApp* app, entity::EzyObject* data) override {
+        SocketClientProxy::getInstance()->emitStartGame(data);
     }
 };
 
@@ -78,6 +84,7 @@ SocketClientProxy::SocketClientProxy() {
     setup->addDataHandler(constant::AppAccess, new AppAccessHandler());
     setup->addDataHandler(constant::UdpHandshake, new UdpHandshakeHandler());
     auto appSetup = setup->setupApp(APP_NAME);
+    appSetup->addDataHandler("reconnect", new ReconnectResponseHandler());
     appSetup->addDataHandler("startGame", new StartGameResponseHandler());
     mAppAccessed = false;
 }
@@ -100,25 +107,49 @@ bool SocketClientProxy::isConnected() {
     return mSocketClient->isConnected() && mSocketClient->isUdpConnected();
 }
 
-void SocketClientProxy::emitAppAccessed() {
+void SocketClientProxy::emitReconnected(entity::EzyObject *data) {
     mAppAccessed = true;
-    mAppAccessedCallback();
+    mReconnectedCallback(data);
 }
 
-void SocketClientProxy::emitReconnect(const entity::EzyObject *data) {
-    mReconnectCallback(data);
+void SocketClientProxy::onReconnected(const objectCallback &callback) {
+    mReconnectedCallback = callback;
 }
 
-void SocketClientProxy::onAppAccessed(const callback0 &callback) {
-    mAppAccessedCallback = callback;
+void SocketClientProxy::emitGameIdReceived(entity::EzyObject *data) {
+    mGameIdReceivedCallback(data);
 }
 
-void SocketClientProxy::onResponseReceived(const objectCallback &callback) {
-    mReconnectCallback = callback;
+void SocketClientProxy::onGameIdReceived(const objectCallback &callback) {
+    mGameIdReceivedCallback = callback;
 }
 
-void SocketClientProxy::syncPosition(const std::string objectName,
-                                     int objectIndex,
+void SocketClientProxy::emitStartGame(entity::EzyObject *data) {
+    mStartGameCallback(data);
+}
+
+void SocketClientProxy::onStartGame(const objectCallback &callback) {
+    mStartGameCallback = callback;
+}
+
+
+void SocketClientProxy::getGameId() {
+    auto request = new entity::EzyObject();
+    request->setString("gameName", GAME_NAME);
+    mSocketClient->getApp()->send("getGameId", request);
+}
+
+void SocketClientProxy::startGame(long gameId) {
+    auto request = new entity::EzyObject();
+    request->setString("gameName", GAME_NAME);
+    request->setInt("gameId", gameId);
+    mSocketClient->getApp()->send("startGame", request);
+}
+
+void SocketClientProxy::syncPosition(long gameId,
+                                     std::string objectName,
+                                     int objectId,
+                                     bool visible,
                                      double x,
                                      double y) {
     if(!mAppAccessed) {
@@ -130,8 +161,10 @@ void SocketClientProxy::syncPosition(const std::string objectName,
     position->setDouble("z", 0);
     auto request = new entity::EzyObject();
     request->setString("gameName", GAME_NAME);
+    request->setInt("gameId", gameId);
+    request->setInt("objectId", objectId);
     request->setString("objectName", objectName);
-    request->setInt("objectIndex", objectIndex);
+    request->setBool("visible", visible);
     request->setObject("position", position);
     mSocketClient->getApp()->udpSend("syncPosition", request);
 }

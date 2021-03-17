@@ -8,11 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @EzyObjectBinding
-public class SyncPositionRequest {
+public class ReconnectRequest {
     private String gameName;
-    private long gameId;
-    private int objectId;
-    private String objectName;
-    private boolean visible;
-    private Position position;
 }

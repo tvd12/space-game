@@ -13,22 +13,30 @@ using namespace cocos2d;
 using namespace EZY_NAMESPACE;
 
 GameManager::GameManager() {
-    mGameObjects = std::map<Node*, Vec2>();
+    mGameObjectById = std::map<int, Node*>();
+    mGameObjectPositions = std::map<Node*, Vec2>();
 }
 
 void GameManager::addGameObject(Node *gameObject) {
-    mGameObjects[gameObject] = Vec2::ZERO;
+    mGameObjectById[gameObject->getTag()] = gameObject;
+    mGameObjectPositions[gameObject] = Vec2::ZERO;
+}
+
+Node* GameManager::getGameObject(int id) {
+    return mGameObjectById[id];
 }
 
 void GameManager::syncGameObjectPositions() {
     auto socketClientProxy = SocketClientProxy::getInstance();
-    EZY_FOREACH_MAP(mGameObjects) {
+    EZY_FOREACH_MAP(mGameObjectPositions) {
         auto obj = it->first;
         auto position = obj->getPosition();
         if(position != it->second) {
             it->second = position;
-            socketClientProxy->syncPosition(obj->getName(),
+            socketClientProxy->syncPosition(mGameId,
+                                            obj->getName(),
                                             obj->getTag(),
+                                            obj->isVisible(),
                                             position.x,
                                             position.y);
         }
@@ -36,5 +44,6 @@ void GameManager::syncGameObjectPositions() {
 }
 
 void GameManager::clear() {
-    mGameObjects.clear();
+    mGameObjectById.clear();
+    mGameObjectPositions.clear();
 }

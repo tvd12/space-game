@@ -16,6 +16,8 @@ import lombok.Setter;
 public class GameObjectPosition {
     @EzyCollectionId(composite = true)
     private Id id;
+    private String objectName;
+    private boolean visible;
     private Position position;
 
     @Getter
@@ -24,8 +26,7 @@ public class GameObjectPosition {
     @AllArgsConstructor
     public static class Id {
         private String game;
-        private String player;
-        private String objectName;
-        private int index;
+        private long gameId;
+        private int objectId;
     }
 }

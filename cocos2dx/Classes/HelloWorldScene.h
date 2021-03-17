@@ -63,12 +63,14 @@ private:
     double _gameOverTime;
     bool _gameOver;
     
+    int _managedObjectCount;
+    
     // scheduled Update
     void update(float dt);
     
     void endScene(EndReason endReason);
     void restartTapped();
-    
+    void runAsteroid(cocos2d::Node* asteroid);
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();

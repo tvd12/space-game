@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::socket::EzySocketClient::processEventMessages():EzySocketClient.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::codec::EzyDataDecoder::addData(char const*, int):EzyDataDecoder.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "mDat">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "SocketClientProxy::SocketClientProxy():SocketClientProxy.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "GameManager::syncGameObjectPositions():GameManager.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::socket::EzySocketClient::processReceivedMessages():EzySocketClient.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "SocketClientProxy::emitReconnected(com::tvd12::ezyfoxserver::client::entity::EzyObject*):SocketClientProxy.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "HelloWorld::init()::$_0::operator()(com::tvd12::ezyfoxserver::client::entity::EzyObject const*) const:HelloWorldScene.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::entity::EzyPrimitive::getDouble():EzyPrimitive.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::codec::EzyDataDecoder::readDouble(char const*):EzyDataDecoder.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "SocketClientProxy::getGameId():SocketClientProxy.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::socket::EzyUdpSocketClient::sendMessage(com::tvd12::ezyfoxserver::client::entity::EzyValue*):EzyUdpSocketClient.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "HelloWorld::init()::$_0::operator()(com::tvd12::ezyfoxserver::client::entity::EzyObject*) const:HelloWorldScene.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::entity::EzyApp::udpSend(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, com::tvd12::ezyfoxserver::client::entity::EzyValue*):EzyApp.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::socket::EzyUTSocketClient::udpSendMessage(com::tvd12::ezyfoxserver::client::entity::EzyValue*):EzyUTSocketClient.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "com::tvd12::ezyfoxserver::client::codec::EzyDataDecoder::processData(char const*, int&amp;):EzyDataDecoder.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ReconnectResponseHandler::process(com::tvd12::ezyfoxserver::client::entity::EzyApp*, com::tvd12::ezyfoxserver::client::entity::EzyObject*):SocketClientProxy.cpp">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

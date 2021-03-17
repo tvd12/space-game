@@ -13,10 +13,14 @@
 
 class GameManager {
 private:
-    std::map<cocos2d::Node*, cocos2d::Vec2> mGameObjects;
+    std::map<int, cocos2d::Node*> mGameObjectById;
+    std::map<cocos2d::Node*, cocos2d::Vec2> mGameObjectPositions;
 private:
     EZY_SINGLETON_GET_INSTANCE(GameManager);
+protected:
+    EZY_SYNTHESIZE(long, GameId);
 public:
+    cocos2d::Node* getGameObject(int id);
     void addGameObject(cocos2d::Node* gameObject);
     void syncGameObjectPositions();
     void clear();

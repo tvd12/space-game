@@ -12,8 +12,7 @@
 
 using namespace EZY_NAMESPACE;
 
-typedef std::function<void()> callback0;
-typedef std::function<void(const entity::EzyObject*)> objectCallback;
+typedef std::function<void(entity::EzyObject*)> objectCallback;
 
 class SocketClientProxy {
 private:
@@ -24,8 +23,9 @@ private:
 protected:
     EZY_SYNTHESIZE_READONLY(std::string, Username);
     EZY_SYNTHESIZE_READONLY(std::string, Password);
-    EZY_SYNTHESIZE_READONLY(callback0, AppAccessedCallback);
-    EZY_SYNTHESIZE_READONLY(objectCallback, ReconnectCallback);
+    EZY_SYNTHESIZE_READONLY(objectCallback, ReconnectedCallback);
+    EZY_SYNTHESIZE_READONLY(objectCallback, GameIdReceivedCallback);
+    EZY_SYNTHESIZE_READONLY(objectCallback, StartGameCallback);
 public:
     void setCredential(const std::string username = "dungtv",
                        const std::string password = "123456");
@@ -33,12 +33,23 @@ public:
     void processEvents();
     bool isConnected();
 public:
-    void emitAppAccessed();
-    void emitReconnect(const entity::EzyObject* data);
-    void onAppAccessed(const callback0& callback);
-    void onResponseReceived(const objectCallback& callback);
+    void emitReconnected(entity::EzyObject* data);
+    void onReconnected(const objectCallback& callback);
+    
+    void emitGameIdReceived(entity::EzyObject* data);
+    void onGameIdReceived(const objectCallback& callback);
+    
+    void emitStartGame(entity::EzyObject* data);
+    void onStartGame(const objectCallback& callback);
 public:
-    void syncPosition(const std::string objectName, int objectIndex, double x, double y);
+    void getGameId();
+    void startGame(long gameId);
+    void syncPosition(long gameId,
+                      std::string objectName,
+                      int objectIndex,
+                      bool visible,
+                      double x,
+                      double y);
 };
 
 #endif /* SocketClientProxy_h */

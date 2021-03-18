@@ -29,6 +29,7 @@
 #include "GameManager.h"
 
 using namespace cocos2d;
+using namespace cocos2d::ui;
 using namespace CocosDenshion;
 
 Scene* HelloWorld::scene()
@@ -191,8 +192,27 @@ bool HelloWorld::init()
         this->unscheduleUpdate();
     });
     
-    socketClientProxy->setCredential();
-    socketClientProxy->connectToServer();
+    if(socketClientProxy->isFirstLogin()) {
+        _usernameEditBox = ui::EditBox::create(Size(100, 16), "blank.png");
+        _usernameEditBox->setPosition(Vec2(winSize.width/2, winSize.height/2 + 15));
+        _usernameEditBox->setPlaceHolder("username");
+        _usernameEditBox->setText("dungtv");
+        _usernameEditBox->setFont("Arial.fnt", 12);
+        _usernameEditBox->setFontColor(Color3B(245, 117, 66));
+        this->addChild(_usernameEditBox);
+        
+        auto playSprite = Sprite::create("play.png");
+        auto playMenuItem = MenuItemSprite::create(playSprite, playSprite, [&](Ref* ref) {
+            SocketClientProxy::getInstance()->setCredential(_usernameEditBox->getText());
+            SocketClientProxy::getInstance()->connectToServer();
+            _usernameEditBox->setVisible(false);
+            _playMenu->setVisible(false);
+        });
+        playMenuItem->setPosition(Vec2(winSize.width/2, winSize.height/2 - 15));
+        _playMenu = Menu::create(playMenuItem, NULL);
+        _playMenu->setPosition(Point::ZERO);
+        this->addChild(_playMenu);
+    }
     
     return true;
 }

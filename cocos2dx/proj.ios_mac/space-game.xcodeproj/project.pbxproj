@@ -107,6 +107,8 @@
 		F151DD1525FDB82F00C2603C /* EzyUdpSocketClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F151DCD425FD209600C2603C /* EzyUdpSocketClient.cpp */; };
 		F151DD1625FDB82F00C2603C /* EzySocketWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F151DCD525FD209600C2603C /* EzySocketWriter.cpp */; };
 		F1A3796B25FE40DE00FF4286 /* GameManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1A3796925FE40DD00FF4286 /* GameManager.cpp */; };
+		F1A3798C2603868E00FF4286 /* blank.png in Resources */ = {isa = PBXBuildFile; fileRef = F1A3798B2603868E00FF4286 /* blank.png */; };
+		F1A3799226038CC300FF4286 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = F1A3799126038CC300FF4286 /* play.png */; };
 		F1F9ACB025FC5499009216B2 /* laser_ship.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1F9AC9725FC5498009216B2 /* laser_ship.wav */; };
 		F1F9ACB125FC5499009216B2 /* laser_ship.wav in Resources */ = {isa = PBXBuildFile; fileRef = F1F9AC9725FC5498009216B2 /* laser_ship.wav */; };
 		F1F9ACB225FC5499009216B2 /* Sprites.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = F1F9AC9825FC5498009216B2 /* Sprites.pvr.ccz */; };
@@ -404,6 +406,8 @@
 		F151DCDA25FDA8AA00C2603C /* SocketClientProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketClientProxy.h; sourceTree = "<group>"; };
 		F1A3796925FE40DD00FF4286 /* GameManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameManager.cpp; sourceTree = "<group>"; };
 		F1A3796A25FE40DD00FF4286 /* GameManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameManager.h; sourceTree = "<group>"; };
+		F1A3798B2603868E00FF4286 /* blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank.png; sourceTree = "<group>"; };
+		F1A3799126038CC300FF4286 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		F1F9AC9725FC5498009216B2 /* laser_ship.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = laser_ship.wav; sourceTree = "<group>"; };
 		F1F9AC9825FC5498009216B2 /* Sprites.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sprites.pvr.ccz; sourceTree = "<group>"; };
 		F1F9AC9925FC5498009216B2 /* shake.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = shake.caf; sourceTree = "<group>"; };
@@ -563,6 +567,8 @@
 				F1F9AC9E25FC5498009216B2 /* bg_planetsunrise.png */,
 				F1F9AC9B25FC5498009216B2 /* bg_spacialanomaly.png */,
 				F1F9ACA825FC5499009216B2 /* bg_spacialanomaly2.png */,
+				F1A3798B2603868E00FF4286 /* blank.png */,
+				F1A3799126038CC300FF4286 /* play.png */,
 				F1F9AC9C25FC5498009216B2 /* CloseNormal.png */,
 				F1F9ACA425FC5499009216B2 /* CloseSelected.png */,
 				F1F9ACAE25FC5499009216B2 /* explosion_large.caf */,
@@ -1059,6 +1065,7 @@
 				F1F9ACB025FC5499009216B2 /* laser_ship.wav in Resources */,
 				F1F9ACC225FC5499009216B2 /* explosion_small.caf in Resources */,
 				F1F9ACBA25FC5499009216B2 /* CloseNormal.png in Resources */,
+				F1A3798C2603868E00FF4286 /* blank.png in Resources */,
 				F1F9ACE025FC5499009216B2 /* powerup.caf in Resources */,
 				F1F9ACD825FC5499009216B2 /* laser_enemy.caf in Resources */,
 				F1F9ACC425FC5499009216B2 /* Stars1.plist in Resources */,
@@ -1070,6 +1077,7 @@
 				F1F9ACDA25FC5499009216B2 /* Arial.png in Resources */,
 				F1F9ACB825FC5499009216B2 /* bg_spacialanomaly.png in Resources */,
 				F1F9ACC025FC5499009216B2 /* explosion_large.wav in Resources */,
+				F1A3799226038CC300FF4286 /* play.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				F1F9ACD625FC5499009216B2 /* SpaceGame.caf in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,

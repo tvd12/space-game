@@ -27,7 +27,10 @@ protected:
         auto request = request::EzyLoginRequest::create();
         request->setZoneName(ZONE_NAME);
         request->setUsername(SocketClientProxy::getInstance()->getUsername());
-        request->setPassword(SocketClientProxy::getInstance()->getUsername());
+        request->setPassword(SocketClientProxy::getInstance()->getPassword());
+        auto data = new entity::EzyArray();
+        data->addString(GAME_NAME);
+        request->setData(data);
         return request;
     };
 };
@@ -36,6 +39,8 @@ class LoginSuccessHandler : public handler::EzyLoginSuccessHandler {
 protected:
     void handleLoginSuccess(entity::EzyValue* responseData) {
         mClient->udpConnect(2611);
+        if(SocketClientProxy::getInstance()->isFirstLogin())
+            SocketClientProxy::getInstance()->setFirstLogin(false);
     }
 };
  
@@ -80,6 +85,7 @@ protected:
 };
 
 SocketClientProxy::SocketClientProxy() {
+    mFirstLogin = true;
     auto config = config::EzyClientConfig::create();
     config->setClientName(ZONE_NAME);
     mSocketClient = EzyUTClient::create(config);

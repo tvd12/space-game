@@ -22,6 +22,7 @@ private:
 private:
     EZY_SINGLETON_GET_INSTANCE(SocketClientProxy);
 protected:
+    EZY_SYNTHESIZE_BOOL(FirstLogin);
     EZY_SYNTHESIZE_READONLY(std::string, Username);
     EZY_SYNTHESIZE_READONLY(std::string, Password);
     EZY_SYNTHESIZE_READONLY(objectCallback, ReconnectedCallback);

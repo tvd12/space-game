@@ -26,6 +26,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 
 class ParallaxNodeExtras;
 
@@ -48,6 +49,8 @@ private:
     cocos2d::Sprite *_spacialanomaly2;
     
     cocos2d::Label *_scoreLabel;
+    cocos2d::ui::EditBox *_usernameEditBox;
+    cocos2d::Menu *_playMenu;
     
     cocos2d::EventListenerTouchAllAtOnce *_touchListener;
     

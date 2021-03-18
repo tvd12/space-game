@@ -1,5 +1,4 @@
 cocos2d
-CMakeLists.txt
 proj.linux
 *.a
 *.so

@@ -81,10 +81,6 @@ LOCAL_C_INCLUDES := \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/manager \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/constant \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/concurrent \
-		$(LOCAL_PATH)/../../../ezyfox-client/src/rapidjson \
-		$(LOCAL_PATH)/../../../ezyfox-client/src/rapidjson/internal \
-		$(LOCAL_PATH)/../../../ezyfox-client/src/rapidjson/error \
-		$(LOCAL_PATH)/../../../ezyfox-client/src/rapidjson/msinttypes \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/gc \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/request \
 		$(LOCAL_PATH)/../../../ezyfox-client/src/event \

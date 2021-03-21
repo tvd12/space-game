@@ -114,7 +114,7 @@ void SocketClientProxy::setCredential(const std::string username,
 
 void SocketClientProxy::connectToServer() {
     if(!isConnected()) {
-        mSocketClient->connect("192.168.51.106", 3005);
+        mSocketClient->connect("127.0.0.1", 3005);
     }
 }
 

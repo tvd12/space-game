@@ -29,6 +29,8 @@ set(APP_NAME hello-world)
 
 project(${APP_NAME})
 
+add_subdirectory(ezyfox-client)
+
 set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
@@ -48,60 +50,6 @@ endif()
 
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
-    ezyfox-client/src/handler/EzyEventHandlers.cpp
-    ezyfox-client/src/handler/EzyDataHandlers.cpp
-    ezyfox-client/src/handler/EzyEventHandler.cpp
-    ezyfox-client/src/handler/EzyAppDataHandlers.cpp
-    ezyfox-client/src/handler/EzyPluginDataHandlers.cpp
-    ezyfox-client/src/handler/EzyPluginDataHandler.cpp
-    ezyfox-client/src/handler/EzyAppDataHandler.cpp
-    ezyfox-client/src/handler/EzyDataHandler.cpp
-    ezyfox-client/src/EzyUTClient.cpp
-    ezyfox-client/src/logger/EzyLogger.cpp
-    ezyfox-client/src/config/EzyClientConfig.cpp
-    ezyfox-client/src/entity/EzyApp.cpp
-    ezyfox-client/src/entity/EzyString.cpp
-    ezyfox-client/src/entity/EzyZone.cpp
-    ezyfox-client/src/entity/EzyPrimitive.cpp
-    ezyfox-client/src/entity/EzyObject.cpp
-    ezyfox-client/src/entity/EzyArray.cpp
-    ezyfox-client/src/entity/EzyValue.cpp
-    ezyfox-client/src/entity/EzyUser.cpp
-    ezyfox-client/src/entity/EzyPlugin.cpp
-    ezyfox-client/src/codec/EzyMessage.cpp
-    ezyfox-client/src/codec/EzyDataDecoder.cpp
-    ezyfox-client/src/codec/EzyDataEncoder.cpp
-    ezyfox-client/src/EzyClient.cpp
-    ezyfox-client/src/setup/EzySetup.cpp
-    ezyfox-client/src/EzyClients.cpp
-    ezyfox-client/src/manager/EzyPluginManager.cpp
-    ezyfox-client/src/manager/EzyAppManager.cpp
-    ezyfox-client/src/manager/EzyHandlerManager.cpp
-    ezyfox-client/src/manager/EzyPingManager.cpp
-    ezyfox-client/src/constant/EzyConnectionStatus.cpp
-    ezyfox-client/src/constant/EzyCommand.cpp
-    ezyfox-client/src/constant/EzyDisconnectReason.cpp
-    ezyfox-client/src/constant/EzyConnectionFailedReason.cpp
-    ezyfox-client/src/concurrent/EzyThread.cpp
-    ezyfox-client/src/concurrent/EzyScheduleAtFixedRate.cpp
-    ezyfox-client/src/gc/EzyReleasePool.cpp
-    ezyfox-client/src/gc/EzyAutoReleasePool.cpp
-    ezyfox-client/src/request/EzyRequest.cpp
-    ezyfox-client/src/request/EzyRequestSerializer.cpp
-    ezyfox-client/src/event/EzyEvent.cpp
-    ezyfox-client/src/event/EzyEventType.cpp
-    ezyfox-client/src/base/EzyRef.cpp
-    ezyfox-client/src/socket/EzyTcpSocketClient.cpp
-    ezyfox-client/src/socket/EzySocketClient.cpp
-    ezyfox-client/src/socket/EzySocketAdapter.cpp
-    ezyfox-client/src/socket/EzySocketCore.cpp
-    ezyfox-client/src/socket/EzyMainEventsLoop.cpp
-    ezyfox-client/src/socket/EzyPingSchedule.cpp
-    ezyfox-client/src/socket/EzySocketPool.cpp
-    ezyfox-client/src/socket/EzySocketReader.cpp
-    ezyfox-client/src/socket/EzyUTSocketClient.cpp
-    ezyfox-client/src/socket/EzyUdpSocketClient.cpp
-    ezyfox-client/src/socket/EzySocketWriter.cpp
      Classes/SocketClientProxy.cpp   
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
@@ -110,69 +58,6 @@ list(APPEND GAME_SOURCE
      Classes/GameManager.cpp
      )
 list(APPEND GAME_HEADER
-    ezyfox-client/src/handler/EzyPluginDataHandlers.h
-    ezyfox-client/src/handler/EzyEventHandler.h
-    ezyfox-client/src/handler/EzyPluginDataHandler.h
-    ezyfox-client/src/handler/EzyDataHandlers.h
-    ezyfox-client/src/handler/EzyEventHandlers.h
-    ezyfox-client/src/handler/EzyAppDataHandler.h
-    ezyfox-client/src/handler/EzyDataHandler.h
-    ezyfox-client/src/handler/EzyAppDataHandlers.h
-    ezyfox-client/src/EzyClient.h
-    ezyfox-client/src/EzyClients.h
-    ezyfox-client/src/EzyUTClient.h
-    ezyfox-client/src/logger/EzyLogger.h
-    ezyfox-client/src/util/EzyStack.h
-    ezyfox-client/src/util/EzyMaps.h
-    ezyfox-client/src/config/EzyClientConfig.h
-    ezyfox-client/src/entity/EzyUser.h
-    ezyfox-client/src/entity/EzyPlugin.h
-    ezyfox-client/src/entity/EzyPrimitive.h
-    ezyfox-client/src/entity/EzyArray.h
-    ezyfox-client/src/entity/EzyValue.h
-    ezyfox-client/src/entity/EzyZone.h
-    ezyfox-client/src/entity/EzyApp.h
-    ezyfox-client/src/entity/EzyObject.h
-    ezyfox-client/src/entity/EzyString.h
-    ezyfox-client/src/codec/EzyDataEncoder.h
-    ezyfox-client/src/codec/EzyMessage.h
-    ezyfox-client/src/codec/EzyDataDecoder.h
-    ezyfox-client/src/setup/EzySetup.h
-    ezyfox-client/src/EzyHeaders.h
-    ezyfox-client/src/manager/EzyHandlerManager.h
-    ezyfox-client/src/manager/EzyAppManager.h
-    ezyfox-client/src/manager/EzyPingManager.h
-    ezyfox-client/src/manager/EzyPluginManager.h
-    ezyfox-client/src/EzyMacro.h
-    ezyfox-client/src/constant/EzyStatusCode.h
-    ezyfox-client/src/constant/EzyConnectionStatus.h
-    ezyfox-client/src/constant/EzyTransportType.h
-    ezyfox-client/src/constant/EzyConnectionFailedReason.h
-    ezyfox-client/src/constant/EzyDisconnectReason.h
-    ezyfox-client/src/constant/EzyCommand.h
-    ezyfox-client/src/concurrent/EzyThread.h
-    ezyfox-client/src/concurrent/EzyScheduleAtFixedRate.h
-    ezyfox-client/src/gc/EzyReleasePool.h
-    ezyfox-client/src/gc/EzyAutoReleasePool.h
-    ezyfox-client/src/request/EzyRequest.h
-    ezyfox-client/src/request/EzyRequestSerializer.h
-    ezyfox-client/src/event/EzyEventType.h
-    ezyfox-client/src/event/EzyEvent.h
-    ezyfox-client/src/base/EzyRef.h
-    ezyfox-client/src/socket/EzySocketDelegate.h
-    ezyfox-client/src/socket/EzySocketAdapter.h
-    ezyfox-client/src/socket/EzySocketClient.h
-    ezyfox-client/src/socket/EzySocketReader.h
-    ezyfox-client/src/socket/EzySocketDefine.h
-    ezyfox-client/src/socket/EzyTcpSocketClient.h
-    ezyfox-client/src/socket/EzySocketPool.h
-    ezyfox-client/src/socket/EzyUdpSocketClient.h
-    ezyfox-client/src/socket/EzyUTSocketClient.h
-    ezyfox-client/src/socket/EzySender.h
-    ezyfox-client/src/socket/EzySocketCore.h
-    ezyfox-client/src/socket/EzySocketWriter.h
-    ezyfox-client/src/socket/EzyPingSchedule.h
-    ezyfox-client/src/socket/EzyMainEventsLoop.h
      Classes/SocketClientProxy.h
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
@@ -246,24 +131,10 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+target_link_libraries(${APP_NAME} ezyfox-client)
+
 target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME}
-        PRIVATE ezyfox-client/src
-        PRIVATE ezyfox-client/src/handler
-        PRIVATE ezyfox-client/src/logger
-        PRIVATE ezyfox-client/src/util
-        PRIVATE ezyfox-client/src/config
-        PRIVATE ezyfox-client/src/entity
-        PRIVATE ezyfox-client/src/codec
-        PRIVATE ezyfox-client/src/setup
-        PRIVATE ezyfox-client/src/manager
-        PRIVATE ezyfox-client/src/constant
-        PRIVATE ezyfox-client/src/concurrent
-        PRIVATE ezyfox-client/src/gc
-        PRIVATE ezyfox-client/src/request
-        PRIVATE ezyfox-client/src/event
-        PRIVATE ezyfox-client/src/base
-        PRIVATE ezyfox-client/src/socket
         PRIVATE Classes
         PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )

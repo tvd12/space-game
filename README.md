@@ -8,9 +8,9 @@ Demo for [ezyfox-sever](https://youngmonkeys.org/ezyfox-sever/)
 Download completed source [here](https://resources.tvd12.com/space-game-1.0.0.zip)
 
 # Guide
-[Use embedded ezyfox-server](https://youngmonkeys.org/use-embedded-server/)
-[Use ezyfox cpp client sdk](https://youngmonkeys.org/ezyfox-cpp-client-sdk/)
-[User to ezydata-mongodb](https://youngmonkeys.org/introduce-to-ezymongo/)
+1. [Use embedded ezyfox-server](https://youngmonkeys.org/use-embedded-server/)
+1. [Use ezyfox cpp client sdk](https://youngmonkeys.org/ezyfox-cpp-client-sdk/)
+1. [User to ezydata-mongodb](https://youngmonkeys.org/introduce-to-ezymongo/)
 
 # Build issues
 1. Argument value 10880 is outside the valid range [0, 255]

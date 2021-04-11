@@ -80,6 +80,16 @@ public class UserRequestController extends EzyLoggable {
                 .execute();
     }
 
+    @EzyRequestHandle("finishGame")
+    public void finishGame(FinishGameRequest request) {
+        GameId gameId = new GameId(request.getGameName(), request.getGameId());
+        GameCurrentState gameCurrentState = gameCurrentStateRepo.findById(gameId);
+        if(gameCurrentState != null) {
+            gameCurrentState.setState(GameState.FINISHED);
+            gameCurrentStateRepo.save(gameCurrentState);
+        }
+    }
+
     @EzyRequestHandle("reconnect")
     public void reconnect(ReconnectRequest request, EzyUser user) {
         String game = request.getGameName();

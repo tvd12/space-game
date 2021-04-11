@@ -144,6 +144,13 @@
 			remoteGlobalIDString = A07A4C241783777C0073F6A7;
 			remoteInfo = "cocos2dx iOS";
 		};
+		F17C8911260B8C8E00F4B5BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F17C890D260B8C8E00F4B5BB /* ezyfox-client.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F1955055260608FD00402511;
+			remoteInfo = "ezyfox-client";
+		};
 		F195516726060B7C00402511 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F195516326060B7C00402511 /* ezyfox-client.xcodeproj */;
@@ -210,6 +217,7 @@
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		F151DCD925FDA8AA00C2603C /* SocketClientProxy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SocketClientProxy.cpp; sourceTree = "<group>"; };
 		F151DCDA25FDA8AA00C2603C /* SocketClientProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketClientProxy.h; sourceTree = "<group>"; };
+		F17C890D260B8C8E00F4B5BB /* ezyfox-client.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ezyfox-client.xcodeproj"; path = "../ezyfox-client/platform/apple/ezyfox-client.xcodeproj"; sourceTree = "<group>"; };
 		F195516326060B7C00402511 /* ezyfox-client.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ezyfox-client.xcodeproj"; path = "../ezyfox-client/platform/apple/ezyfox-client.xcodeproj"; sourceTree = "<group>"; };
 		F1A3796925FE40DD00FF4286 /* GameManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameManager.cpp; sourceTree = "<group>"; };
 		F1A3796A25FE40DD00FF4286 /* GameManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameManager.h; sourceTree = "<group>"; };
@@ -328,8 +336,8 @@
 			children = (
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
-				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
 				F195516326060B7C00402511 /* ezyfox-client.xcodeproj */,
+				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				1AF87B461F6F77D6007BE51C /* ios */,
 				503AE10617EB990700D1A890 /* mac */,
@@ -368,6 +376,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F17C890D260B8C8E00F4B5BB /* ezyfox-client.xcodeproj */,
 				F1F9AC9D25FC5498009216B2 /* Arial.fnt */,
 				F1F9ACAC25FC5499009216B2 /* Arial.png */,
 				F1F9ACA625FC5499009216B2 /* bg_front_spacedust.png */,
@@ -440,6 +449,14 @@
 				503AE10417EB98FF00D1A890 /* Prefix.pch */,
 			);
 			name = mac;
+			sourceTree = "<group>";
+		};
+		F17C890E260B8C8E00F4B5BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F17C8912260B8C8E00F4B5BB /* libezyfox-client.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		F195516426060B7C00402511 /* Products */ = {
@@ -525,6 +542,10 @@
 					ProductGroup = F195516426060B7C00402511 /* Products */;
 					ProjectRef = F195516326060B7C00402511 /* ezyfox-client.xcodeproj */;
 				},
+				{
+					ProductGroup = F17C890E260B8C8E00F4B5BB /* Products */;
+					ProjectRef = F17C890D260B8C8E00F4B5BB /* ezyfox-client.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -554,6 +575,13 @@
 			fileType = archive.ar;
 			path = "libcocos2d iOS.a";
 			remoteRef = 1AC6FB06180E9839004C840B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F17C8912260B8C8E00F4B5BB /* libezyfox-client.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libezyfox-client.a";
+			remoteRef = F17C8911260B8C8E00F4B5BB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		F195516826060B7C00402511 /* libezyfox-client.a */ = {

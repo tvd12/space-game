@@ -50,6 +50,7 @@ public:
 public:
     void getGameId();
     void startGame(long gameId);
+    void finishGame(long gameId);
     void syncScore(long gameId, long score);
     void syncPosition(long gameId,
                       std::string objectName,

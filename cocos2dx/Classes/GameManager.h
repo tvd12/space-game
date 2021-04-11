@@ -21,6 +21,9 @@ protected:
     EZY_SYNTHESIZE(long, GameId);
 public:
     cocos2d::Node* getGameObject(int id);
+    void getNewGameId();
+    void finishGame();
+    void startGame();
     void addGameObject(cocos2d::Node* gameObject);
     void syncGameObjectPositions();
     void syncScore(long score);

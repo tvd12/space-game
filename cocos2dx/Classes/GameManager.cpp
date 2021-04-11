@@ -26,6 +26,18 @@ Node* GameManager::getGameObject(int id) {
     return mGameObjectById[id];
 }
 
+void GameManager::getNewGameId() {
+    SocketClientProxy::getInstance()->getGameId();
+}
+
+void GameManager::startGame() {
+    SocketClientProxy::getInstance()->startGame(mGameId);
+}
+
+void GameManager::finishGame() {
+    SocketClientProxy::getInstance()->finishGame(mGameId);
+}
+
 void GameManager::syncGameObjectPositions() {
     auto socketClientProxy = SocketClientProxy::getInstance();
     EZY_FOREACH_MAP(mGameObjectPositions) {

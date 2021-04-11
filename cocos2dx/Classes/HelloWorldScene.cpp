@@ -164,32 +164,27 @@ bool HelloWorld::init()
         }
         _currentScore = data->getInt("playerScore");
         _scoreLabel->setString(std::string("Score: ").append(std::to_string(_currentScore)));
-        if(gameId) {
-            if(gameState == "PLAYING") {
-                _touchEnabled = true;
-                this->scheduleUpdate();
-            }
-            else {
-                SocketClientProxy::getInstance()->startGame(gameId);
-            }
+        if(gameId && gameState == "PLAYING") {
+            _touchEnabled = true;
+            scheduleUpdate();
         }
         else {
-            SocketClientProxy::getInstance()->getGameId();
+            GameManager::getInstance()->getNewGameId();
         }
     });
     socketClientProxy->onGameIdReceived([&](entity::EzyObject* data) {
         _touchEnabled = true;
         auto gameId = data->getInt("gameId");
         GameManager::getInstance()->setGameId(gameId);
-        SocketClientProxy::getInstance()->startGame(gameId);
+        GameManager::getInstance()->startGame();
     });
     socketClientProxy->onStartGame([&](entity::EzyObject* data) {
         _touchEnabled = true;
-        this->scheduleUpdate();
+        scheduleUpdate();
     });
     socketClientProxy->onDisconnected([&] {
         _touchEnabled = false;
-        this->unscheduleUpdate();
+        unscheduleUpdate();
     });
     
     if(socketClientProxy->isFirstLogin()) {
@@ -319,9 +314,10 @@ void HelloWorld::update(float dt) {
     if (_lives <= 0) {
         _ship->stopAllActions();
         _ship->setVisible(false);
-        this->endScene(KENDREASONLOSE);
+        endScene(KENDREASONLOSE);
+        GameManager::getInstance()->finishGame();
     } else if (curTimeMillis >= _gameOverTime) {
-        this->endScene(KENDREASONWIN);
+        endScene(KENDREASONWIN);
     }
     GameManager::getInstance()->syncGameObjectPositions();
 }

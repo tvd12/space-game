@@ -173,6 +173,13 @@ void SocketClientProxy::startGame(long gameId) {
     mSocketClient->getApp()->send("startGame", request);
 }
 
+void SocketClientProxy::finishGame(long gameId) {
+    auto request = new entity::EzyObject();
+    request->setString("gameName", GAME_NAME);
+    request->setInt("gameId", gameId);
+    mSocketClient->getApp()->send("finishGame", request);
+}
+
 void SocketClientProxy::syncScore(long gameId, long score) {
     auto request = new entity::EzyObject();
     request->setString("gameName", GAME_NAME);

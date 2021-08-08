@@ -1,0 +1,3 @@
+[submodule "ezyfox-client"] 
+  path = cocos2dx/ezyfox-client 
+  url = https://github.com/youngmonkeys/ezyfox-server-cpp-client.git

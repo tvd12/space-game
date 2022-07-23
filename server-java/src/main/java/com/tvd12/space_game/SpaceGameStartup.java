@@ -12,6 +12,7 @@ import com.tvd12.ezyfoxserver.ext.EzyAbstractPluginEntryLoader;
 import com.tvd12.ezyfoxserver.ext.EzyAppEntry;
 import com.tvd12.ezyfoxserver.ext.EzyPluginEntry;
 import com.tvd12.ezyfoxserver.setting.*;
+import com.tvd12.ezyfoxserver.support.annotation.EzyDisallowRequest;
 import com.tvd12.ezyfoxserver.support.controller.EzyUserRequestAppSingletonController;
 import com.tvd12.ezyfoxserver.support.entry.EzySimpleAppEntry;
 import com.tvd12.ezyfoxserver.support.entry.EzySimplePluginEntry;
@@ -32,8 +33,13 @@ public class SpaceGameStartup {
                 .name(APP_NAME)
                 .entryLoader(SpaceGameAppEntryLoader.class);
 
+        EzyUserManagementSettingBuilder userManagementSettingBuilder = new EzyUserManagementSettingBuilder()
+            .maxSessionPerUser(1)
+            .allowChangeSession(true);
+
         EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
                 .name(ZONE_NAME)
+            .userManagement(userManagementSettingBuilder.build())
                 .application(appSettingBuilder.build())
                 .plugin(pluginSettingBuilder.build());
 
@@ -80,17 +86,11 @@ public class SpaceGameStartup {
         }
 
         @Override
-        protected void setupBeanContext(EzyAppContext context, EzyBeanContextBuilder builder) {
-            builder.addProperties("application.yaml");
-        }
-
-        @Override
         protected EzyAppRequestController newUserRequestController(EzyBeanContext beanContext) {
             return EzyUserRequestAppSingletonController.builder()
                     .beanContext(beanContext)
                     .build();
         }
-
     }
 
     public static class SpaceGameAppEntryLoader extends EzyAbstractAppEntryLoader {
@@ -99,9 +99,9 @@ public class SpaceGameStartup {
         public EzyAppEntry load() {
             return new SpaceGameAppEntry();
         }
-
     }
 
+    @EzyDisallowRequest
     public static class SpaceGamePluginEntry extends EzySimplePluginEntry {
 
         @Override
@@ -109,11 +109,6 @@ public class SpaceGameStartup {
             return new String[]{
                     "com.tvd12.space_game"
             };
-        }
-
-        @Override
-        protected void setupBeanContext(EzyPluginContext context, EzyBeanContextBuilder builder) {
-            builder.addProperties("application.yaml");
         }
     }
 

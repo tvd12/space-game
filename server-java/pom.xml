@@ -5,13 +5,14 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>0.0.3</version>
+		<version>1.0.5</version>
 	</parent>
 	<artifactId>space-game-server-java</artifactId>
 	<name>space-game-server-java</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<ezy.version>1.1.9</ezy.version>
+		<ezy.version>1.2.4</ezy.version>
+		<ezy.boot.version>1.0.6</ezy.boot.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -23,6 +24,11 @@
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezydata-mongodb</artifactId>
 			<version>${ezy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-boot-autoconfigure</artifactId>
+			<version>${ezy.boot.version}</version>
 		</dependency>
 	</dependencies>
 </project>
